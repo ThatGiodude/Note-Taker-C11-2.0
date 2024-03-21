@@ -3,7 +3,6 @@ const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
-
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -16,8 +15,13 @@ res.sendFile(path.join(__dirname, '/public/index.html'))
 );
 
 app.get("/notes", (req,res) =>
-res.sendFile(path.join(__dirname, '/publice/notes.html'))
+res.sendFile(path.join(__dirname, '/public/notes.html'))
 ); //GET route for the notes page
+
+app.get('/api/notes', async(req,res) => {
+    const dbJson = await JSON.parse(fs.readFileSync("db/db.json", "utf8"));
+    res.json(dbJson);
+})
 
 app.post('/api/notes', (req,res) => {
     const dbJson = JSON.parse(fs.readFileSync("db/db.json", "utf8"));
